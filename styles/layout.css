@@ -6,6 +6,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background-color: #f3f3f3;
 }
 
 header {
@@ -42,13 +44,13 @@ main {
 
   width: 100%;
   max-width: 640px;
-  height: 100vh;
 
   background-color: #f3f3f3;
 }
 
 main .message {
   padding: 11px 9px;
+  margin-bottom: 4px;
 
   width: 100%;
   max-width: 640px;
@@ -77,6 +79,10 @@ main .message .timestamp {
 
 main .message .username {
   font-weight: 700;
+}
+
+main .message .colon {
+  font-weight: 400;
 }
 
 footer {
