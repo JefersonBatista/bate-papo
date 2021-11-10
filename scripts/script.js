@@ -1,7 +1,40 @@
+let username = "";
+
+enter_room();
+
+function enter_room() {
+  username = prompt("Escolha um nome de usuário:");
+  const user_obj = {
+    name: username,
+  };
+
+  axios
+    .post("https://mock-api.driven.com.br/api/v4/uol/participants", user_obj)
+    .catch(try_enter_room_again);
+}
+
+function try_enter_room_again() {
+  alert("Esse nome já está sendo usado por um usuário online.");
+  enter_room();
+}
+
+// Keeping connection every five seconds
+const connection_interval = setInterval(keep_connection, 5000);
+
+function keep_connection() {
+  const user_obj = {
+    name: username,
+  };
+
+  axios.post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj);
+}
+
 get_messages();
 
 // Updating messages every three seconds
-const updateInterval = setInterval(update_messages, 3000);
+const update_interval = setInterval(update_messages, 3000);
+
+let last_msg_time = "";
 
 function get_messages() {
   const msgs_promise = axios.get(
@@ -25,7 +58,13 @@ function load_messages(msgs_response) {
 
   const main_element = document.querySelector("main");
   main_element.innerHTML = messages;
-  main_element.lastElementChild.scrollIntoView();
+
+  // Did the last message changed?
+  const last_msg = msgs_data[msgs_data.length - 1];
+  if (last_msg_time !== last_msg.time) {
+    last_msg_time = last_msg.time;
+    main_element.lastElementChild.scrollIntoView();
+  }
 }
 
 function message_html(from, to, text, type, time) {
