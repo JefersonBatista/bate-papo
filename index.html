@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="styles/reset.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+
+    <title>Bate-Papo UOL</title>
+  </head>
+  <body>
+    <header>
+      <img class="logo" src="images/logo 1.png" alt="Logo" />
+      <ion-icon name="people"></ion-icon>
+    </header>
+    <main>
+      <article class="message status" data-identifier="message">
+        <span class="timestamp">(09:21:45)</span>
+        <span class="username">João</span>
+        <span>entrou na sala...</span>
+      </article>
+      <article class="message" data-identifier="message">
+        <span class="timestamp">(09:22:28)</span>
+        <span class="username">João</span>
+        <span>para</span>
+        <span class="username">Todos:</span>
+        <span>Bom dia</span>
+      </article>
+      <article class="message reserved" data-identifier="message">
+        <span class="timestamp">(09:22:48)</span>
+        <span class="username">João</span>
+        <span>reservadamente para</span>
+        <span class="username">Maria</span>
+        <span>Oi gatinha quer tc?</span>
+      </article>
+    </main>
+    <footer>
+      <p>Escreva aqui...</p>
+      <ion-icon
+        data-identifier="send-message"
+        name="paper-plane-outline"
+      ></ion-icon>
+    </footer>
+
+    <!-- Using Ion-Icons -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+
+    <script src="scripts/script.js"></script>
+  </body>
+</html>
