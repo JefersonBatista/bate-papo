@@ -110,7 +110,7 @@ function message_html(from, to, text, type, time) {
 function send_message() {
   const input_element = document.querySelector("footer input");
   const text = input_element.value;
-  input_element = text;
+  input_element.value = "";
 
   const message = {
     from: username,
