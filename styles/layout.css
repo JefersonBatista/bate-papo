@@ -45,6 +45,8 @@ main {
   width: 100%;
   max-width: 640px;
 
+  /* overflow-y: scroll; */
+
   background-color: #f3f3f3;
 }
 
@@ -105,12 +107,22 @@ footer {
 }
 
 footer ion-icon {
+  margin-left: 18px;
+
   font-size: 32px;
+
+  cursor: pointer;
 }
 
-footer p {
+footer input {
+  width: 100%;
+
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-style: italic;
   font-size: 18px;
+}
+
+footer input:focus {
+  font-style: normal;
 }

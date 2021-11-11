@@ -10,6 +10,7 @@ function enter_room() {
 
   axios
     .post("https://mock-api.driven.com.br/api/v4/uol/participants", user_obj)
+    .then(get_messages)
     .catch(try_enter_room_again);
 }
 
@@ -28,8 +29,6 @@ function keep_connection() {
 
   axios.post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj);
 }
-
-get_messages();
 
 // Updating messages every three seconds
 const update_interval = setInterval(update_messages, 3000);
@@ -91,14 +90,42 @@ function message_html(from, to, text, type, time) {
   }
 
   if (type === "private_message") {
-    return `
-      <article class="message reserved" data-identifier="message">
-        <span class="timestamp">(${time})</span>
-        <span class="username">${from}</span>
-        <span>reservadamente para</span>
-        <span class="username">${to}<span class="colon">:</span></span>
-        <span>${text}</span>
-      </article>
-    `;
+    if (to === username) {
+      return `
+        <article class="message reserved" data-identifier="message">
+          <span class="timestamp">(${time})</span>
+          <span class="username">${from}</span>
+          <span>reservadamente para</span>
+          <span class="username">${to}<span class="colon">:</span></span>
+          <span>${text}</span>
+        </article>
+      `;
+    }
   }
+
+  // Return empty string if no case is satisfied
+  return "";
+}
+
+function send_message() {
+  const input_element = document.querySelector("footer input");
+  const text = input_element.value;
+  input_element = text;
+
+  const message = {
+    from: username,
+    to: "Todos",
+    text,
+    type: "message",
+  };
+
+  axios
+    .post("https://mock-api.driven.com.br/api/v4/uol/messages", message)
+    .then(update_messages)
+    .catch(reconnect);
+}
+
+function reconnect(error) {
+  alert("Seu usuário está offline.");
+  enter_room();
 }

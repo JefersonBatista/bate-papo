@@ -2,3 +2,12 @@
   margin: 0;
   padding: 0;
 }
+
+footer input {
+  border: none;
+}
+
+footer input:focus {
+  outline: none;
+  border: none;
+}
