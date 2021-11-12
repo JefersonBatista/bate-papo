@@ -90,7 +90,7 @@ function message_html(from, to, text, type, time) {
   }
 
   if (type === "private_message") {
-    if (to === username) {
+    if (from === username || to === username) {
       return `
         <article class="message reserved" data-identifier="message">
           <span class="timestamp">(${time})</span>
@@ -128,4 +128,46 @@ function send_message() {
 function reconnect(error) {
   alert("Seu usuário está offline.");
   enter_room();
+}
+
+function toggle_menu() {
+  // Switching menu screen
+  const menu_screen = document.querySelector(".menu_screen");
+  menu_screen.classList.toggle("hidden");
+
+  // It does not make sense now!
+  // const gray_area = document.querySelector(".gray-area");
+  // gray_area.classList.toggle("hidden");
+
+  // If menu will be shown, update participant list
+  const menu_is_shown = !menu_screen.classList.contains("hidden");
+
+  if (menu_is_shown) {
+    axios
+      .get("https://mock-api.driven.com.br/api/v4/uol/participants")
+      .then(listParticipants);
+  }
+}
+
+function listParticipants(participants_response) {
+  const participants = document.querySelector(".participants");
+  participants.innerHTML = `
+    <div class="contact">
+      <ion-icon name="people"></ion-icon>
+      <span class="name">Todos</span>
+    </div>
+  `;
+
+  const participants_data = participants_response.data;
+  for (let i = 0; i < participants_data.length; i++) {
+    const participant = participants_data[i];
+    const name = participant.name;
+
+    participants.innerHTML += `
+      <div class="contact">
+        <ion-icon name="person-circle"></ion-icon>
+        <span class="name">${name}</span>
+      </div>
+    `;
+  }
 }

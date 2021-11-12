@@ -7,12 +7,12 @@
 
     <link rel="stylesheet" href="styles/reset.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
       rel="stylesheet"
-    />
+    /> -->
 
     <link rel="stylesheet" href="styles/layout.css" />
 
@@ -21,11 +21,21 @@
   <body>
     <header>
       <img class="logo" src="images/logo 1.png" alt="Logo" />
-      <ion-icon name="people"></ion-icon>
+      <ion-icon name="people" onclick="toggle_menu()"></ion-icon>
     </header>
-    <main>
-      <!-- Filled by JS -->
-    </main>
+    <div class="container">
+      <main class="messages">
+        <!-- Filled by JS -->
+      </main>
+      <aside class="menu_screen hidden" onclick="toggle_menu()">
+        <div class="menu">
+          <p>Escolha um contato<br />para enviar mensagem:</p>
+          <div class="participants">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </aside>
+    </div>
     <footer>
       <input placeholder="Escreva aqui..." />
       <ion-icon
