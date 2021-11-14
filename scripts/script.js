@@ -1,4 +1,7 @@
 let username = "";
+let contact = "Todos";
+let private_msg = false;
+let last_msg_time = "";
 
 enter_room();
 
@@ -32,8 +35,6 @@ function keep_connection() {
 
 // Updating messages every three seconds
 const update_interval = setInterval(update_messages, 3000);
-
-let last_msg_time = "";
 
 function get_messages() {
   const msgs_promise = axios.get(
@@ -131,16 +132,15 @@ function reconnect(error) {
 }
 
 function toggle_menu() {
-  // Switching menu screen
-  const menu_screen = document.querySelector(".menu_screen");
-  menu_screen.classList.toggle("hidden");
+  // Switching menu
+  const menu = document.querySelector(".menu");
+  menu.classList.toggle("hidden");
 
-  // It does not make sense now!
-  // const gray_area = document.querySelector(".gray-area");
-  // gray_area.classList.toggle("hidden");
+  const black_screen = document.querySelector(".black_screen");
+  black_screen.classList.toggle("hidden");
 
   // If menu will be shown, update participant list
-  const menu_is_shown = !menu_screen.classList.contains("hidden");
+  const menu_is_shown = !menu.classList.contains("hidden");
 
   if (menu_is_shown) {
     axios
@@ -152,9 +152,10 @@ function toggle_menu() {
 function listParticipants(participants_response) {
   const participants = document.querySelector(".participants");
   participants.innerHTML = `
-    <div class="contact">
-      <ion-icon name="people"></ion-icon>
+    <div class="contact item selected" onclick="select_contact(this)">
+      <ion-icon class="icon" name="people"></ion-icon>
       <span class="name">Todos</span>
+      <ion-icon class="check" name="checkmark-sharp"></ion-icon>
     </div>
   `;
 
@@ -164,10 +165,53 @@ function listParticipants(participants_response) {
     const name = participant.name;
 
     participants.innerHTML += `
-      <div class="contact">
-        <ion-icon name="person-circle"></ion-icon>
+      <div class="contact item" onclick="select_contact(this)">
+        <ion-icon class="icon" name="person-circle"></ion-icon>
         <span class="name">${name}</span>
+        <ion-icon class="check hidden" name="checkmark-sharp"></ion-icon>
       </div>
     `;
   }
+}
+
+function select_contact(item) {
+  // Undo current selection
+  const prev_selected = document.querySelector(".contact.item.selected");
+  if (prev_selected) {
+    prev_selected.classList.remove("selected");
+
+    const prev_check = prev_selected.querySelector(".check");
+    prev_check.classList.add("hidden");
+  }
+
+  // Selecting new item
+  item.classList.add("selected");
+
+  const check = item.querySelector(".check");
+  check.classList.remove("hidden");
+
+  // Changing contact name
+  contact = item.querySelector(".name").innerHTML;
+  console.log("contact: " + contact);
+}
+
+function select_visibility(item) {
+  // Undo current selection
+  const prev_selected = document.querySelector(".visibility.item.selected");
+  if (prev_selected) {
+    prev_selected.classList.remove("selected");
+
+    const prev_check = prev_selected.querySelector(".check");
+    prev_check.classList.add("hidden");
+  }
+
+  // Selecting new item
+  item.classList.add("selected");
+
+  const check = item.querySelector(".check");
+  check.classList.remove("hidden");
+
+  // Changing message privacity
+  private_msg = item.querySelector(".option").innerHTML === "Reservadamente";
+  console.log("private_msg: " + private_msg);
 }

@@ -27,11 +27,23 @@
       <main class="messages">
         <!-- Filled by JS -->
       </main>
-      <aside class="menu_screen hidden" onclick="toggle_menu()">
-        <div class="menu">
-          <p>Escolha um contato<br />para enviar mensagem:</p>
-          <div class="participants">
-            <!-- Filled by JS -->
+      <div class="black_screen hidden" onclick="toggle_menu()"></div>
+      <aside class="menu hidden">
+        <p>Escolha um contato<br />para enviar mensagem:</p>
+        <div class="participants">
+          <!-- Filled by JS -->
+        </div>
+        <p>Escolha a visibilidade:</p>
+        <div class="visibility_options">
+          <div class="visibility item selected" onclick="select_visibility(this)">
+            <ion-icon class="icon" name="lock-open"></ion-icon>
+            <span class="option">Público</span>
+            <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+          </div>
+          <div class="visibility item" onclick="select_visibility(this)">
+            <ion-icon class="icon" name="lock-closed"></ion-icon>
+            <span class="option">Reservadamente</span>
+            <ion-icon class="check hidden" name="checkmark-sharp"></ion-icon>
           </div>
         </div>
       </aside>
