@@ -5,6 +5,15 @@ let last_msg_time = "";
 
 enter_room();
 
+// Keeping connection every five seconds
+const connection_interval = setInterval(keep_connection, 5000);
+
+// Updating messages every three seconds
+const messages_interval = setInterval(update_messages, 3000);
+
+// Updating participant list every ten seconds
+const participants_interval = setInterval(update_participants, 10000);
+
 function enter_room() {
   username = prompt("Escolha um nome de usuário:");
   const user_obj = {
@@ -22,9 +31,6 @@ function try_enter_room_again() {
   enter_room();
 }
 
-// Keeping connection every five seconds
-const connection_interval = setInterval(keep_connection, 5000);
-
 function keep_connection() {
   const user_obj = {
     name: username,
@@ -32,9 +38,6 @@ function keep_connection() {
 
   axios.post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj);
 }
-
-// Updating messages every three seconds
-const update_interval = setInterval(update_messages, 3000);
 
 function get_messages() {
   const msgs_promise = axios.get(
@@ -138,39 +141,58 @@ function toggle_menu() {
 
   const black_screen = document.querySelector(".black_screen");
   black_screen.classList.toggle("hidden");
-
-  // If menu will be shown, update participant list
-  const menu_is_shown = !menu.classList.contains("hidden");
-
-  if (menu_is_shown) {
-    axios
-      .get("https://mock-api.driven.com.br/api/v4/uol/participants")
-      .then(listParticipants);
-  }
 }
 
-function listParticipants(participants_response) {
+function update_participants() {
+  axios
+    .get("https://mock-api.driven.com.br/api/v4/uol/participants")
+    .then(list_participants);
+}
+
+function list_participants(participants_response) {
   const participants = document.querySelector(".menu .participants");
+  const is_for_all = contact === "Todos";
+
   participants.innerHTML = `
-    <div class="contact item selected" onclick="select_contact(this)">
+    <div id="all" class="contact item${
+      is_for_all ? " selected" : ""
+    }" data-identifier="participant" onclick="select_contact(this)">
       <ion-icon class="icon" name="people"></ion-icon>
       <span class="name">Todos</span>
-      <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+      <ion-icon class="check${
+        is_for_all ? "" : " hidden"
+      }" name="checkmark-sharp"></ion-icon>
     </div>
   `;
 
   const participants_data = participants_response.data;
+  let contact_left_chat = true;
   for (let i = 0; i < participants_data.length; i++) {
     const participant = participants_data[i];
     const name = participant.name;
+    const is_for_this = contact !== "Todos" && contact === name;
+
+    if (is_for_this) {
+      contact_left_chat = false;
+    }
 
     participants.innerHTML += `
-      <div class="contact item" onclick="select_contact(this)">
+      <div class="contact item${
+        is_for_this ? " selected" : ""
+      }" data-identifier="participant" onclick="select_contact(this)">
         <ion-icon class="icon" name="person-circle"></ion-icon>
         <span class="name">${name}</span>
-        <ion-icon class="check hidden" name="checkmark-sharp"></ion-icon>
+        <ion-icon class="check${
+          is_for_this ? "" : " hidden"
+        }" name="checkmark-sharp"></ion-icon>
       </div>
     `;
+  }
+
+  // If the selected participant left the chat, select "Todos"
+  if (contact_left_chat) {
+    const all = document.querySelector(".menu .contact.item#all");
+    select_contact(all);
   }
 }
 
