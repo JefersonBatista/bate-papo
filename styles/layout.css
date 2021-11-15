@@ -163,7 +163,7 @@ header ion-icon {
 
   font-size: 24px;
 
-  color: #28BB25;
+  color: #28bb25;
 }
 
 footer {
@@ -204,6 +204,16 @@ footer input {
 
 footer input:focus {
   font-style: normal;
+}
+
+footer .receiver {
+  position: absolute;
+  bottom: 10px;
+  left: 18px;
+
+  font-size: 16px;
+
+  color: #aaa;
 }
 
 .hidden {

@@ -35,7 +35,10 @@
         </div>
         <p>Escolha a visibilidade:</p>
         <div class="visibility_options">
-          <div class="visibility item selected" onclick="select_visibility(this)">
+          <div
+            class="visibility item selected"
+            onclick="select_visibility(this)"
+          >
             <ion-icon class="icon" name="lock-open"></ion-icon>
             <span class="option">Público</span>
             <ion-icon class="check" name="checkmark-sharp"></ion-icon>
@@ -55,6 +58,9 @@
         name="paper-plane-outline"
         onclick="send_message()"
       ></ion-icon>
+      <span class="receiver">
+        <!-- Filled by JS -->
+      </span>
     </footer>
 
     <!-- Using Ion-Icons -->
@@ -70,6 +76,7 @@
     <!-- Using Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <!-- Including my JS code -->
     <script src="scripts/script.js"></script>
   </body>
 </html>

@@ -91,7 +91,7 @@ function message_html(from, to, text, type, time) {
   }
 
   if (type === "private_message") {
-    if (from === username || to === username) {
+    if (to === "Todos" || from === username || to === username) {
       return `
         <article class="message reserved" data-identifier="message">
           <span class="timestamp">(${time})</span>
@@ -115,9 +115,9 @@ function send_message() {
 
   const message = {
     from: username,
-    to: "Todos",
+    to: contact,
     text,
-    type: "message",
+    type: private_msg ? "private_message" : "message",
   };
 
   axios
@@ -150,7 +150,7 @@ function toggle_menu() {
 }
 
 function listParticipants(participants_response) {
-  const participants = document.querySelector(".participants");
+  const participants = document.querySelector(".menu .participants");
   participants.innerHTML = `
     <div class="contact item selected" onclick="select_contact(this)">
       <ion-icon class="icon" name="people"></ion-icon>
@@ -176,7 +176,7 @@ function listParticipants(participants_response) {
 
 function select_contact(item) {
   // Undo current selection
-  const prev_selected = document.querySelector(".contact.item.selected");
+  const prev_selected = document.querySelector(".menu .contact.item.selected");
   if (prev_selected) {
     prev_selected.classList.remove("selected");
 
@@ -193,11 +193,15 @@ function select_contact(item) {
   // Changing contact name
   contact = item.querySelector(".name").innerHTML;
   console.log("contact: " + contact);
+
+  update_receiver_info();
 }
 
 function select_visibility(item) {
   // Undo current selection
-  const prev_selected = document.querySelector(".visibility.item.selected");
+  const prev_selected = document.querySelector(
+    ".menu .visibility.item.selected"
+  );
   if (prev_selected) {
     prev_selected.classList.remove("selected");
 
@@ -214,4 +218,20 @@ function select_visibility(item) {
   // Changing message privacity
   private_msg = item.querySelector(".option").innerHTML === "Reservadamente";
   console.log("private_msg: " + private_msg);
+
+  update_receiver_info();
+}
+
+function update_receiver_info() {
+  let receiver_info = "";
+  if (contact !== "Todos") {
+    receiver_info = `Enviando para ${contact}`;
+
+    if (private_msg) {
+      receiver_info += " (reservadamente)";
+    }
+  }
+
+  const receiver_element = document.querySelector("footer .receiver");
+  receiver_element.innerHTML = receiver_info;
 }
