@@ -22,12 +22,13 @@
     <div class="login">
       <img class="logo" src="images/logo 1.png" alt="logo" />
       <form onsubmit="enter_room(); return false">
-        <input placeholder="Digite seu nome" />
-        <button onclick="enter_room()">Entrar</button>
+        <input data-identifier="enter-name" placeholder="Digite seu nome" />
+        <button data-identifier="start" onclick="enter_room()">Entrar</button>
+        <p class="alert hidden">
+          Esse nome já está sendo<br />usado por um usuário online.
+        </p>
       </form>
-      <p class="alert hidden">
-        Esse nome já está sendo usado por um usuário online.
-      </p>
+      <img class="entering hidden" src="images/entrando.png" alt="entrando" />
     </div>
     <div class="chat hidden">
       <header>

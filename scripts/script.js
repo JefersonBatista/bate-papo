@@ -18,6 +18,14 @@ function enter_room() {
     name: username,
   };
 
+  // Hide login form
+  const login_form = document.querySelector(".login form");
+  login_form.classList.add("hidden");
+
+  // Show entering image
+  const entering = document.querySelector(".login .entering");
+  entering.classList.remove("hidden");
+
   axios
     .post("https://mock-api.driven.com.br/api/v4/uol/participants", user_obj)
     .then(go_to_chat)
@@ -25,6 +33,15 @@ function enter_room() {
 }
 
 function alert_user() {
+  // Show login form
+  const login_form = document.querySelector(".login form");
+  login_form.classList.remove("hidden");
+
+  // Hide entering image
+  const entering = document.querySelector(".login .entering");
+  entering.classList.add("hidden");
+
+  // Show login alert
   const login_alert = document.querySelector(".login .alert");
   login_alert.classList.remove("hidden");
 
@@ -42,6 +59,7 @@ function keep_connection() {
 
   axios
     .post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj)
+    .then(() => console.log("keeping connection"))
     .catch((error) => console.log(error.response));
 }
 
