@@ -12,7 +12,75 @@ body {
   background-color: #aaa;
 }
 
-header {
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 640px;
+  height: 100vh;
+
+  background-color: white;
+}
+
+.login .logo {
+  margin-bottom: 90px;
+
+  width: 130px;
+  height: 92px;
+}
+
+.login form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+}
+
+.login form input {
+  width: 75%;
+  height: 60px;
+  border-radius: 4px;
+
+  border: 1px solid #d7d7d7;
+}
+
+.login form button {
+  margin: 15px 0;
+
+  width: 109px;
+  height: 45px;
+  border-radius: 9px;
+
+  background-color: #e7e7e7;
+  color: #696969;
+}
+
+.login form input,
+.login form button {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  text-align: center;
+}
+
+.login .alert {
+  color: red;
+
+  transition: opacity 500ms linear;
+}
+
+.login .alert.hidden {
+  display: block;
+
+  opacity: 0;
+}
+
+.chat header {
   position: fixed;
   z-index: 1;
   top: 0;
@@ -31,18 +99,18 @@ header {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-header .logo {
+.chat header .logo {
   width: 75px;
   height: 53px;
 }
 
-header ion-icon {
+.chat header .menu_button {
   font-size: 48px;
 
   cursor: pointer;
 }
 
-.container {
+.chat {
   margin: 80px 0;
 
   width: 100%;
@@ -52,7 +120,7 @@ header ion-icon {
   overflow-y: scroll;
 }
 
-.messages {
+.chat .messages {
   padding: 26px 0;
 
   width: 100%;
@@ -60,7 +128,7 @@ header ion-icon {
   background-color: #f3f3f3;
 }
 
-.messages .message {
+.chat .messages .message {
   padding: 11px 9px;
   margin-bottom: 4px;
 
@@ -77,27 +145,27 @@ header ion-icon {
   background-color: white;
 }
 
-.messages .message.status {
+.chat .messages .message.status {
   background-color: #dcdcdc;
 }
 
-.messages .message.reserved {
+.chat .messages .message.reserved {
   background-color: #ffdede;
 }
 
-.messages .message .timestamp {
+.chat .messages .message .timestamp {
   color: #aaa;
 }
 
-.messages .message .username {
+.chat .messages .message .username {
   font-weight: 700;
 }
 
-.messages .message .colon {
+.chat .messages .message .colon {
   font-weight: 400;
 }
 
-.black_screen {
+.chat .black_screen {
   position: fixed;
   z-index: 2;
   top: 0;
@@ -109,7 +177,7 @@ header ion-icon {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.menu {
+.chat .menu {
   position: fixed;
   z-index: 3;
   top: 0;
@@ -129,7 +197,12 @@ header ion-icon {
   transition: transform 300ms ease-in-out;
 }
 
-.menu .item {
+.chat .menu.hidden {
+  display: flex;
+  transform: translateX(100%);
+}
+
+.chat .menu .item {
   display: flex;
   align-items: center;
 
@@ -138,15 +211,15 @@ header ion-icon {
   cursor: pointer;
 }
 
-.menu p,
-.menu .item {
+.chat .menu p,
+.chat .menu .item {
   font-family: "Roboto", sans-serif;
   font-style: normal;
   font-size: 16px;
   text-align: center;
 }
 
-.menu p {
+.chat .menu p {
   margin-top: 20px;
 
   font-weight: 700;
@@ -156,13 +229,13 @@ header ion-icon {
   font-weight: 400;
 }
 
-.menu .item .icon {
+.chat .menu .item .icon {
   margin: 0 8px;
 
   font-size: 32px;
 }
 
-.menu .item .check {
+.chat .menu .item .check {
   position: absolute;
   right: 27px;
 
@@ -171,7 +244,7 @@ header ion-icon {
   color: #28bb25;
 }
 
-footer {
+.chat footer {
   position: fixed;
   z-index: 1;
   bottom: 0;
@@ -190,20 +263,20 @@ footer {
   box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 }
 
-footer form {
+.chat footer form {
   display: flex;
   justify-content: space-between;
 
   width: 100%;
 }
 
-footer form ion-icon {
+.chat footer form .send_button {
   font-size: 32px;
 
   cursor: pointer;
 }
 
-footer form input {
+.chat footer form input {
   width: 100%;
 
   font-family: "Roboto", sans-serif;
@@ -212,19 +285,14 @@ footer form input {
   font-size: 18px;
 }
 
-footer form input:focus {
+.chat footer form input:focus {
   font-style: normal;
 }
 
-footer .receiver {
+.chat footer .receiver {
   font-size: 16px;
 
   color: #aaa;
-}
-
-.menu.hidden {
-  display: flex;
-  transform: translateX(100%);
 }
 
 .hidden {

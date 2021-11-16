@@ -1,36 +1,38 @@
+// Control variables
 let username = "";
 let contact = "Todos";
 let private_msg = false;
 let last_msg_time = "";
+let alert_timeout;
 
-enter_room();
-
-// Keeping connection every five seconds
-const connection_interval = setInterval(keep_connection, 5000);
-
-// Updating messages every three seconds
-const messages_interval = setInterval(update_messages, 3000);
-
-// Updating participant list every ten seconds
-const participants_interval = setInterval(update_participants, 10000);
+// Interval variables of recurrent actions
+let connection_interval;
+let messages_interval;
+let participants_interval;
 
 function enter_room() {
-  username = prompt("Escolha um nome de usuário:");
+  const login_input = document.querySelector(".login form input");
+  username = login_input.value;
+
   const user_obj = {
     name: username,
   };
 
   axios
     .post("https://mock-api.driven.com.br/api/v4/uol/participants", user_obj)
-    .then(get_messages)
-    .catch(try_enter_room_again);
-
-  update_participants();
+    .then(go_to_chat)
+    .catch(alert_user);
 }
 
-function try_enter_room_again() {
-  alert("Esse nome já está sendo usado por um usuário online.");
-  enter_room();
+function alert_user() {
+  const login_alert = document.querySelector(".login .alert");
+  login_alert.classList.remove("hidden");
+
+  // Refresh alert timer
+  if (alert_timeout) {
+    clearInterval(alert_timeout);
+  }
+  alert_timeout = setTimeout(() => login_alert.classList.add("hidden"), 2500);
 }
 
 function keep_connection() {
@@ -38,18 +40,39 @@ function keep_connection() {
     name: username,
   };
 
-  axios.post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj);
+  axios
+    .post("https://mock-api.driven.com.br/api/v4/uol/status", user_obj)
+    .catch((error) => console.log(error.response));
 }
 
-function get_messages() {
+function update_messages() {
   const msgs_promise = axios.get(
     "https://mock-api.driven.com.br/api/v4/uol/messages"
   );
   msgs_promise.then(load_messages);
+  msgs_promise.catch((error) => console.log(error.response));
 }
 
-function update_messages() {
-  get_messages();
+function go_to_chat() {
+  // Changing from login to chat screen
+  const login = document.querySelector(".login");
+  login.classList.add("hidden");
+
+  const chat = document.querySelector(".chat");
+  chat.classList.remove("hidden");
+
+  // Getting chat messages and participants
+  update_messages();
+  update_participants();
+
+  // Keeping connection every five seconds
+  connection_interval = setInterval(keep_connection, 5000);
+
+  // Updating messages every three seconds
+  messages_interval = setInterval(update_messages, 3000);
+
+  // Updating participant list every ten seconds
+  participants_interval = setInterval(update_participants, 10000);
 }
 
 function load_messages(msgs_response) {
@@ -61,14 +84,14 @@ function load_messages(msgs_response) {
     messages += message_html(msg.from, msg.to, msg.text, msg.type, msg.time);
   }
 
-  const main_element = document.querySelector("main");
-  main_element.innerHTML = messages;
+  const msgs_element = document.querySelector(".chat .messages");
+  msgs_element.innerHTML = messages;
 
   // Did the last message changed?
   const last_msg = msgs_data[msgs_data.length - 1];
   if (last_msg_time !== last_msg.time) {
     last_msg_time = last_msg.time;
-    main_element.lastElementChild.scrollIntoView();
+    msgs_element.lastElementChild.scrollIntoView();
   }
 }
 
@@ -114,7 +137,7 @@ function message_html(from, to, text, type, time) {
 }
 
 function send_message() {
-  const input_element = document.querySelector("footer input");
+  const input_element = document.querySelector(".chat footer form input");
   const text = input_element.value;
   input_element.value = "";
 
@@ -132,27 +155,30 @@ function send_message() {
 }
 
 function reconnect(error) {
+  console.log(error.response);
+
   alert("Seu usuário está offline.");
-  enter_room();
+  window.location.reload();
 }
 
-function toggle_menu() {
+function toggle_chat_menu() {
   // Switching menu
-  const menu = document.querySelector(".menu");
+  const menu = document.querySelector(".chat .menu");
   menu.classList.toggle("hidden");
 
-  const black_screen = document.querySelector(".black_screen");
+  const black_screen = document.querySelector(".chat .black_screen");
   black_screen.classList.toggle("hidden");
 }
 
 function update_participants() {
   axios
     .get("https://mock-api.driven.com.br/api/v4/uol/participants")
-    .then(list_participants);
+    .then(list_participants)
+    .catch((error) => console.log(error.response));
 }
 
 function list_participants(participants_response) {
-  const participants = document.querySelector(".menu .participants");
+  const participants = document.querySelector(".chat .menu .participants");
   const is_for_all = contact === "Todos";
 
   participants.innerHTML = `
@@ -168,7 +194,7 @@ function list_participants(participants_response) {
   `;
 
   const participants_data = participants_response.data;
-  let contact_left_chat = true;
+  let contact_left_chat = !is_for_all;
   for (let i = 0; i < participants_data.length; i++) {
     const participant = participants_data[i];
     const name = participant.name;
@@ -193,14 +219,16 @@ function list_participants(participants_response) {
 
   // If the selected participant left the chat, select "Todos"
   if (contact_left_chat) {
-    const all = document.querySelector(".menu .contact.item#all");
+    const all = document.querySelector(".chat .menu .contact.item#all");
     select_contact(all);
   }
 }
 
 function select_contact(item) {
   // Undo current selection
-  const prev_selected = document.querySelector(".menu .contact.item.selected");
+  const prev_selected = document.querySelector(
+    ".chat .menu .contact.item.selected"
+  );
   if (prev_selected) {
     prev_selected.classList.remove("selected");
 
@@ -224,7 +252,7 @@ function select_contact(item) {
 function select_visibility(item) {
   // Undo current selection
   const prev_selected = document.querySelector(
-    ".menu .visibility.item.selected"
+    ".chat .menu .visibility.item.selected"
   );
   if (prev_selected) {
     prev_selected.classList.remove("selected");
@@ -256,6 +284,6 @@ function update_receiver_info() {
     }
   }
 
-  const receiver_element = document.querySelector("footer .receiver");
+  const receiver_element = document.querySelector(".chat footer .receiver");
   receiver_element.innerHTML = receiver_info;
 }
