@@ -53,12 +53,14 @@
       </aside>
     </div>
     <footer>
-      <input placeholder="Escreva aqui..." />
-      <ion-icon
-        data-identifier="send-message"
-        name="paper-plane-outline"
-        onclick="send_message()"
-      ></ion-icon>
+      <form onsubmit="send_message(); return false">
+        <input placeholder="Escreva aqui..." />
+        <ion-icon
+          data-identifier="send-message"
+          name="paper-plane-outline"
+          onclick="send_message()"
+        ></ion-icon>
+      </form>
       <span class="receiver">
         <!-- Filled by JS -->
       </span>

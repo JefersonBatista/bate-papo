@@ -24,6 +24,8 @@ function enter_room() {
     .post("https://mock-api.driven.com.br/api/v4/uol/participants", user_obj)
     .then(get_messages)
     .catch(try_enter_room_again);
+
+  update_participants();
 }
 
 function try_enter_room_again() {
